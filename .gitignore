@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+mlruns/
+models/
+.env
+*.log
+.ipynb_checkpoints
+.venv/
+z_old/
+notebooks/
+notebooks/z_old/
