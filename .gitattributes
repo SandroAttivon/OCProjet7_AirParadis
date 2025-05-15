@@ -1,0 +1,4 @@
+*.psd filter=lfs diff=lfs merge=lfs -text
+data/embeddings/glove.6B.100d.txt filter=lfs diff=lfs merge=lfs -text
+data/embeddings/wiki-news-300d-1M.vec filter=lfs diff=lfs merge=lfs -text
+data/raw/training.1600000.processed.noemoticon.csv filter=lfs diff=lfs merge=lfs -text
