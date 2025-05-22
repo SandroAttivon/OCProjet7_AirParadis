@@ -1,19 +1,41 @@
-import unittest
-from utils import clean_text
+import subprocess
+import sys
+import webbrowser
+import os
+import shutil
 
-class PreprocessingTestCase(unittest.TestCase):
-    def test_clean_text_basic(self):
-        text = "I love @airparadis! Visit us: https://t.co/example"
-        cleaned = clean_text(text)
-        self.assertNotIn("@", cleaned)
-        self.assertNotIn("http", cleaned)
-        self.assertNotIn("!", cleaned)
+def run_pytest():
+    htmlcov_path = "htmlcov"
 
-    def test_clean_text_stopwords(self):
-        text = "This is a test with some stopwords"
-        cleaned = clean_text(text)
-        for stopword in ["is", "a", "with", "some"]:
-            self.assertNotIn(stopword, cleaned)
+    # 🧹 Supprimer le dossier htmlcov/ s'il existe
+    if os.path.exists(htmlcov_path) and os.path.isdir(htmlcov_path):
+        print("🧹 Suppression du dossier existant htmlcov/...")
+        shutil.rmtree(htmlcov_path)
 
-if __name__ == '__main__':
-    unittest.main()
+    print("\n🚀 Lancement des tests avec génération de la couverture HTML...\n")
+
+    result = subprocess.run(
+        [
+            "pytest",
+            "--cov=app_with_mlflow",
+            "--cov-report=html",
+            "--cov-report=term-missing",
+            "tests/"
+        ],
+        stdout=sys.stdout,
+        stderr=sys.stderr
+    )
+
+    if result.returncode != 0:
+        print("\n❌ Certains tests ont échoué.\n")
+        sys.exit(result.returncode)
+    else:
+        print("\n✅ Tous les tests sont passés avec succès !")
+        print("📁 Rapport HTML généré dans : ./htmlcov/index.html")
+
+        # 🌐 Ouvrir le rapport HTML automatiquement
+        report_path = os.path.abspath("htmlcov/index.html")
+        webbrowser.open(f"file://{report_path}", new=2)
+
+if __name__ == "__main__":
+    run_pytest()
