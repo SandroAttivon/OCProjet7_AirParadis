@@ -1,0 +1,36 @@
+# Manipulation de données
+pandas>=1.5.0
+
+# NLP classique
+scikit-learn>=1.6.1
+# nltk>=3.7
+# textblob
+
+
+# API Flask
+flask==3.1.0
+gunicorn==23.0.0  # Pour déploiement sur Azure WebApp
+
+# Interface utilisateur locale
+streamlit==1.45.1
+
+# Monitoring (Azure)
+azure-applicationinsights
+
+# Tests
+pytest==8.3.5
+pytest-cov==6.1.1
+
+# Divers
+# tqdm
+
+
+joblib==1.4.2
+
+re==2.2.1
+
+
+
+
+
+
