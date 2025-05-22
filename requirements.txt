@@ -8,7 +8,7 @@ nltk>=3.7
 textblob
 
 # Deep Learning
-tensorflow>=2.10.0
+tensorflow>=2.15.0
 keras>=2.10.0
 
 # Word embeddings
