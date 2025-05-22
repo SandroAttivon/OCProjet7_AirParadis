@@ -36,3 +36,11 @@ pytest>=7.0.0
 
 # Divers
 tqdm
+
+streamlit
+flask
+requests
+joblib
+pandas
+scikit-learn
+mlflow
