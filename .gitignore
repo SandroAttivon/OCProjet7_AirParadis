@@ -9,3 +9,8 @@ models/
 z_old/
 notebooks/
 notebooks/z_old/
+data/embeddings/glove.6B.100d.txt
+data/embeddings/wiki-news-300d-1M.vec
+data/raw/training.1600000.processed.noemoticon.csv
+Presentation_IA_AirParadis.pptx
+htmlcov/
