@@ -3,6 +3,12 @@ import requests
 import mlflow
 import json
 from datetime import datetime
+# import os
+# from app import app  # Import de l'application Flask
+
+# port = int(os.environ.get("PORT", 8501))  # Azure injecte PORT (ex: 8000 ou 80)
+# app.run(host="0.0.0.0", port=port)
+
 
 # 📌 Configuration de la page
 st.set_page_config(page_title="Analyse de sentiment", page_icon="✈️")
@@ -46,14 +52,14 @@ if st.button("🔍 Analyser le sentiment"):
                     with open("feedback_details.json", "w", encoding="utf-8") as f:
                         json.dump(log_data, f, indent=2, ensure_ascii=False)
 
-                    # 🚀 Logging dans MLflow
-                    with mlflow.start_run(run_name="user_feedback", nested=True):
-                        mlflow.log_param("model_used", "TF-IDF + LogisticRegression")
-                        mlflow.log_param("user_validation", feedback)
-                        mlflow.log_metric("score", log_data["score"])
-                        mlflow.set_tag("prediction", result["prediction"])
-                        mlflow.set_tag("timestamp", now)
-                        mlflow.log_artifact("feedback_details.json")
+                    # # 🚀 Logging dans MLflow
+                    # with mlflow.start_run(run_name="user_feedback", nested=True):
+                    #     mlflow.log_param("model_used", "TF-IDF + LogisticRegression")
+                    #     mlflow.log_param("user_validation", feedback)
+                    #     mlflow.log_metric("score", log_data["score"])
+                    #     mlflow.set_tag("prediction", result["prediction"])
+                    #     mlflow.set_tag("timestamp", now)
+                    #     mlflow.log_artifact("feedback_details.json")
 
                     st.success("🎉 Feedback enregistré dans MLflow.")
             else:
