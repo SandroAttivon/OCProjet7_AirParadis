@@ -3,8 +3,13 @@ import pandas as pd
 import joblib
 import re
 import mlflow
+# import os
 
 app = Flask(__name__)
+
+
+# port = int(os.environ.get("PORT", 5500))  # Azure injecte PORT (ex: 8000 ou 80)
+# app.run(host="0.0.0.0", port=port)
 
 # 📂 Chemins vers les modèles et données
 input_path = 'C:/Users/sandr/OneDrive/Documents/JOB/OPENCLASSROOMS/AI_ENGINEER/Projet_7_Réalisez_une_analyse_de_sentiments_grâce_au_Deep_Learning/Workspace/'
