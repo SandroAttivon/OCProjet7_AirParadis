@@ -1,7 +1,6 @@
 __pycache__/
 *.pyc
 mlruns/
-models/
 .env
 *.log
 .ipynb_checkpoints
@@ -14,3 +13,5 @@ data/embeddings/wiki-news-300d-1M.vec
 data/raw/training.1600000.processed.noemoticon.csv
 Presentation_IA_AirParadis.pptx
 htmlcov/
+mlartifacts/
+models/word2vec.model
