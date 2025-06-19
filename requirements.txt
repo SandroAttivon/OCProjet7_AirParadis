@@ -15,7 +15,7 @@ gunicorn==23.0.0  # Pour déploiement sur Azure WebApp
 streamlit==1.45.1
 
 # Monitoring (Azure)
-azure-applicationinsights
+# azure-applicationinsights
 
 # Tests
 pytest==8.3.5
