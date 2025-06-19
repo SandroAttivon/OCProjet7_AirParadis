@@ -65,5 +65,6 @@ def predict_json():
     })
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5500)
+    app.run()
+    # app.run(debug=True, port=5500)
 # Ajouter tests unitaires !!!
