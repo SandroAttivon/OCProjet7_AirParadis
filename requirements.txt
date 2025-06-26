@@ -12,7 +12,7 @@ flask==3.1.0
 gunicorn==23.0.0  # Pour déploiement sur Azure WebApp
 
 # Interface utilisateur locale
-streamlit==1.45.1
+# streamlit==1.45.1
 
 # Monitoring (Azure)
 # azure-applicationinsights

@@ -2,35 +2,69 @@ from flask import Flask, request, jsonify
 import pandas as pd
 import joblib
 import re
-
-# import os
+from nltk.stem.porter import PorterStemmer
+from nltk.stem.wordnet import WordNetLemmatizer
+import os
+import logging
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 app = Flask(__name__)
+
+# Application Insights logger setup
+APPINSIGHTS_CONNECTION_STRING = os.environ.get("APPINSIGHTS_CONNECTION_STRING", "")
+logger = logging.getLogger(__name__)
+if APPINSIGHTS_CONNECTION_STRING:
+    logger.addHandler(AzureLogHandler(connection_string=APPINSIGHTS_CONNECTION_STRING))
 
 
 # port = int(os.environ.get("PORT", 5500))  # Azure injecte PORT (ex: 8000 ou 80)
 # app.run(host="0.0.0.0", port=port)
 
 # 📂 Chemins vers les modèles et données
-# input_path = 'C:/Users/sandr/OneDrive/Documents/JOB/OPENCLASSROOMS/AI_ENGINEER/Projet_7_Réalisez_une_analyse_de_sentiments_grâce_au_Deep_Learning/Workspace/'
 MODEL_PATH = "./models/model_logreg.pkl"
 VECTORIZER_PATH = "./models/tfidf_vectorizer.pkl"
-# CSV_PATH = input_path + "data/raw/training.1600000.processed.noemoticon.csv"
 
 # 🔁 Chargement du modèle et du vectorizer
 model = joblib.load(MODEL_PATH)
 vectorizer = joblib.load(VECTORIZER_PATH)
 
-# 📄 Chargement du fichier CSV une seule fois
-# df = pd.read_csv(CSV_PATH, encoding="latin-1", header=None)
-# df.columns = ["sentiment", "id", "date", "flag", "user", "text"]
 
 # 🧹 Fonction de nettoyage
-def preprocess(text):
+# def preprocess(text):
+#     text = re.sub(r"http\S+|www\S+|https\S+", '', text)
+#     text = re.sub(r"@\w+|#", '', text)
+#     text = re.sub(r"[^\w\s]", '', text.lower())
+#     return text
+
+# 🧹 Advanced cleaning process (NLTK-free stopwords, tokenizer, stemmer, lemmatizer)
+STOPWORDS = {'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you',
+             'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his',
+             'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself',
+             'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which',
+             'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 'are',
+             'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having',
+             'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if',
+             'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for',
+             'with', 'about', 'against', 'between', 'into', 'through', 'during',
+             'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in',
+             'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once'}
+
+def simple_tokenize(text):
+    return re.findall(r'\b\w+\b', text.lower())
+
+stemmer = PorterStemmer()
+lemmatizer = WordNetLemmatizer()
+
+def clean_text(text, method='lemma'):
     text = re.sub(r"http\S+|www\S+|https\S+", '', text)
     text = re.sub(r"@\w+|#", '', text)
     text = re.sub(r"[^\w\s]", '', text.lower())
-    return text
+    words = simple_tokenize(text)
+    words = [w for w in words if w not in STOPWORDS]
+    if method == 'stem':
+        return ' '.join([stemmer.stem(w) for w in words])
+    else:
+        return ' '.join([lemmatizer.lemmatize(w) for w in words])
 
 # @app.route("/predict_random", methods=["GET"])
 # def predict_random():
@@ -45,7 +79,9 @@ def preprocess(text):
 def predict_json():
     data = request.get_json()
     tweet = data.get("tweet", "")
-    cleaned = preprocess(tweet)
+    # cleaned = preprocess(tweet)
+# Use advanced cleaning (lemmatization by default)
+    cleaned = clean_text(tweet, method='lemma')
     vect = vectorizer.transform([cleaned])
     score = model.predict_proba(vect)[0][1]
     sentiment = "positif" if score >= 0.5 else "négatif"
@@ -63,6 +99,12 @@ def predict_json():
         "prediction": sentiment,
         "score": round(float(score), 4)
     })
+
+@app.route("/log_feedback", methods=["POST"])
+def log_feedback():
+    data = request.get_json()
+    logger.info("User feedback", extra={"custom_dimensions": data})
+    return jsonify({"status": "ok"}), 200
 
 if __name__ == "__main__":
     app.run()
