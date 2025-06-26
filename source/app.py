@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 # import pandas as pd
 import joblib
 import re
+import nltk
+nltk.download('wordnet')
 # from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 # import os
