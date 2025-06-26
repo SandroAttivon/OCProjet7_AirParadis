@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 # import pandas as pd
 import joblib
 import re
-from nltk.stem.porter import PorterStemmer
+# from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 # import os
 # import logging
@@ -52,7 +52,7 @@ STOPWORDS = {'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you',
 def simple_tokenize(text):
     return re.findall(r'\b\w+\b', text.lower())
 
-stemmer = PorterStemmer()
+# stemmer = PorterStemmer()
 lemmatizer = WordNetLemmatizer()
 
 def clean_text(text, method='lemma'):
@@ -61,10 +61,10 @@ def clean_text(text, method='lemma'):
     text = re.sub(r"[^\w\s]", '', text.lower())
     words = simple_tokenize(text)
     words = [w for w in words if w not in STOPWORDS]
-    if method == 'stem':
-        return ' '.join([stemmer.stem(w) for w in words])
-    else:
-        return ' '.join([lemmatizer.lemmatize(w) for w in words])
+    # if method == 'stem':
+    #     return ' '.join([stemmer.stem(w) for w in words])
+    # else:
+    return ' '.join([lemmatizer.lemmatize(w) for w in words])
 
 # @app.route("/predict_random", methods=["GET"])
 # def predict_random():
