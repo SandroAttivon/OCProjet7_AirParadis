@@ -1,20 +1,20 @@
 from flask import Flask, request, jsonify
-import pandas as pd
+# import pandas as pd
 import joblib
 import re
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
-import os
-import logging
-from opencensus.ext.azure.log_exporter import AzureLogHandler
+# import os
+# import logging
+# from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 app = Flask(__name__)
 
 # Application Insights logger setup
-APPINSIGHTS_CONNECTION_STRING = os.environ.get("APPINSIGHTS_CONNECTION_STRING", "")
-logger = logging.getLogger(__name__)
-if APPINSIGHTS_CONNECTION_STRING:
-    logger.addHandler(AzureLogHandler(connection_string=APPINSIGHTS_CONNECTION_STRING))
+# APPINSIGHTS_CONNECTION_STRING = os.environ.get("APPINSIGHTS_CONNECTION_STRING", "")
+# logger = logging.getLogger(__name__)
+# if APPINSIGHTS_CONNECTION_STRING:
+#     logger.addHandler(AzureLogHandler(connection_string=APPINSIGHTS_CONNECTION_STRING))
 
 
 # port = int(os.environ.get("PORT", 5500))  # Azure injecte PORT (ex: 8000 ou 80)
